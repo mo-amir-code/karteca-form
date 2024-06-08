@@ -1,7 +1,9 @@
 export interface NewFormType{
     startTime: Date,
     expiryTime: Date,
-    fields: [ObjectType]
+    fields: [ObjectType],
+    title: string,
+    description: string
 }
 
 export interface FormParticipantType{

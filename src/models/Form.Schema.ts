@@ -1,6 +1,8 @@
 import mongoose, {Schema} from "mongoose";
 
 interface FormSchema extends Document {
+    title: string,
+    description: string,
     uid: string,
     fields: object,
     participants?: object[],
@@ -9,6 +11,8 @@ interface FormSchema extends Document {
 }
 
 const formSchema:Schema<FormSchema> = new Schema<FormSchema>({
+    title: { type: String, required: true },
+    description: { type: String, required: true },
     uid: { type: String, required: true, unique: true },
     fields: {type: Object, required: true},
     participants: [{type: Object}],

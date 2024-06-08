@@ -11,9 +11,9 @@ export async function POST(req:Request){
 
         await isDBConnected()
 
-        const { expiryTime, startTime, fields } = await req.json() as NewFormType;
+        const { expiryTime, startTime, fields, title, description } = await req.json() as NewFormType;
 
-        if(!startTime || !expiryTime){
+        if(!startTime || !expiryTime || !title || !description){
             return NextResponse.json({
                 success: true,
                 message: "Required fields are missing!"
@@ -28,6 +28,8 @@ export async function POST(req:Request){
         const fieldsObj = arrayToObject(fields);
 
         const newFormData = {
+            title,
+            description,
             uid: uniqueId,
             fields: fieldsObj,
             startTime: intStartTime,
@@ -69,12 +71,12 @@ export async function GET(req:Request){
             }, { status: 400 });
         }
 
-        const form = await Form.findOne({ uid: formUID }).select("participants");
+        const form = await Form.findOne({ uid: formUID }).select("participants title description");
 
         return NextResponse.json({
             success: true,
             message: "Form data fetched",
-            data:form.participants
+            data: form
         });
 
     } catch (error) {
