@@ -16,7 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <main className="sm:max-w-3xl scroll-smooth max-w-sm w-full mx-auto font-poppins" >
+        {children}
+        </main>
+        </body>
     </html>
   );
 }
