@@ -1,12 +1,13 @@
-import CreateForm from "@/components/form/CreateForm"
-
+"use client";
+import CreateForm from "@/components/form/CreateForm";
+import Form from "@/components/form/Form";
+import { useAppSelector } from "@/redux/hooks";
+import { selectIsFormActive } from "@/redux/slices/form/formSlice";
 
 const Home = () => {
-  return (
-    <div>
-      <CreateForm />
-    </div>
-  )
-}
+  const isFormActive = useAppSelector(selectIsFormActive);
 
-export default Home
+  return isFormActive ? <Form /> : <CreateForm />;
+};
+
+export default Home;
