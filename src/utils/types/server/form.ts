@@ -1,7 +1,7 @@
 export interface NewFormType{
-    startTime: Date,
-    expiryTime: Date,
-    fields: [ObjectType],
+    startTime?: Date,
+    expiryTime?: Date,
+    fields: object,
     title: string,
     description: string
 }

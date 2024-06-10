@@ -4,6 +4,7 @@ import {
   deleteFormValue,
   updateFormValue,
 } from "@/redux/slices/form/formSlice";
+import { INPUT_TYPES } from "@/utils/constants";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { CiSquarePlus } from "react-icons/ci";
@@ -44,7 +45,7 @@ const DropDownField = ({ index }: { index: number }) => {
   return (
     <div className=" relative">
       {drop.map((item, idx) => (
-        <div className="flex relative items-center gap-2">
+        <div key={idx} className="flex relative items-center gap-2">
           <MdOutlineArrowDropDown className="w-4 h-4" />
           <input
             onChange={(e) =>
@@ -53,7 +54,7 @@ const DropDownField = ({ index }: { index: number }) => {
                 valueIndex: idx,
               })
             }
-            type="text"
+            type={INPUT_TYPES.text}
             className="outline-none border-b"
           />
           {idx === (drop.length-1) && idx !== 0 && 

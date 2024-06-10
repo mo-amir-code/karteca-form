@@ -13,7 +13,7 @@ export async function POST(req:Request){
 
         const { expiryTime, startTime, fields, title, description } = await req.json() as NewFormType;
 
-        if(!startTime || !expiryTime || !title || !description){
+        if(!fields || !title || !description){
             return NextResponse.json({
                 success: true,
                 message: "Required fields are missing!"
@@ -22,16 +22,23 @@ export async function POST(req:Request){
 
         const uniqueId = await uid(25);   
 
-        const intStartTime = (new Date(startTime)).getTime();
-        const intExpiryTime = (new Date(expiryTime)).getTime();
+        let intStartTime = undefined;
+        let intExpiryTime = undefined;
 
-        const fieldsObj = arrayToObject(fields);
+        if(startTime){
+            intStartTime = (new Date(startTime)).getTime();
+        }
+        if(expiryTime){
+            intExpiryTime = (new Date(expiryTime)).getTime();
+        }
+
+        // const fieldsObj = arrayToObject(fields);
 
         const newFormData = {
             title,
             description,
             uid: uniqueId,
-            fields: fieldsObj,
+            fields,
             startTime: intStartTime,
             expiryTime: intExpiryTime
         }

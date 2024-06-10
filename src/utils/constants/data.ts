@@ -1,22 +1,24 @@
+import { INPUT_TYPES } from ".";
+
 export const inputValueTypes = [
     {
         name:"Text",
-        slug: "text"
+        slug: INPUT_TYPES.text
     },
     {
         name:"Date",
-        slug: "date"
+        slug: INPUT_TYPES.date
     },
     {
         name:"Multiple Choice",
-        slug: "radio"
+        slug: INPUT_TYPES.radio
     },
     {
         name:"Checkboxes",
-        slug: "checkbox"
+        slug: INPUT_TYPES.checkbox
     },
     {
         name:"Dropdown",
-        slug: "select"
+        slug: INPUT_TYPES.select
     },
 ]

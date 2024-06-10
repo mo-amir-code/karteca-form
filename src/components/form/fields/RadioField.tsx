@@ -4,6 +4,7 @@ import {
   deleteFormValue,
   updateFormValue,
 } from "@/redux/slices/form/formSlice";
+import { INPUT_TYPES } from "@/utils/constants";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { CiSquarePlus } from "react-icons/ci";
@@ -45,7 +46,7 @@ const RadioField = ({ index }: { index: number }) => {
   return (
     <div className=" relative">
       {choices.map((choice, idx) => (
-        <div className="flex relative items-center gap-2">
+        <div key={idx} className="flex relative items-center gap-2">
           <input type="radio" checked disabled className="outline-none" />
           <input
             onChange={(e) =>
@@ -54,7 +55,7 @@ const RadioField = ({ index }: { index: number }) => {
                 valueIndex: idx,
               })
             }
-            type="text"
+            type={INPUT_TYPES.text}
             className="outline-none border-b"
           />
           {idx === choices.length - 1 && idx !== 0 && (

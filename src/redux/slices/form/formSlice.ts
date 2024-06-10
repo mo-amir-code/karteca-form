@@ -1,19 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { FormSliceStateType } from "./formTypes";
 import { RootState } from "@/redux/store";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, INPUT_TYPES } from "@/utils/constants";
 
 const initialState = {
   isFormActive: false,
   form: {
-    title: "Enter title here",
-    description: "Description",
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     fields: ["Question"],
     values: [
       {
-        type: "text",
+        type: INPUT_TYPES.text,
         value: [],
       },
     ],
+    startTime: undefined,
+    expiryTime: undefined
   },
 } as FormSliceStateType;
 
@@ -49,7 +52,7 @@ const formSlice = createSlice({
     createNewFieldInForm(state, action) {
       const { index } = action.payload;
       state.form.fields.splice(index + 1, 0, "Question");
-      state.form.values.splice(index + 1, 0, { type: "text", value:[] });
+      state.form.values.splice(index + 1, 0, { type: INPUT_TYPES.text, value:[] });
     },
     deleteFormField(state, action) {
       const { index } = action.payload;
@@ -65,6 +68,15 @@ const formSlice = createSlice({
       const {title, description} = action.payload;
       state.form.title = title;
       state.form.description = description;
+    },
+    setFormTime(state, action){
+      const {startTime, expiryTime} = action.payload;
+      if(startTime){
+        state.form.startTime = startTime;
+      }
+      if(expiryTime){
+        state.form.expiryTime = expiryTime;
+      }
     }
   },
 });
@@ -77,7 +89,8 @@ export const {
   updateFormField,
   updateFormValue,
   deleteFormValue,
-  updateFormTitleAndDescription
+  updateFormTitleAndDescription,
+  setFormTime
 } = formSlice.actions;
 
 export const selectForm = (state: RootState) => state.form.form;

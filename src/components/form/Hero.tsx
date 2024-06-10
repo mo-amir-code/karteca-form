@@ -4,6 +4,7 @@ import {
   selectForm,
   updateFormTitleAndDescription,
 } from "@/redux/slices/form/formSlice";
+import { INPUT_TYPES } from "@/utils/constants";
 import React, { useEffect, useState } from "react";
 
 const Hero = () => {
@@ -33,17 +34,17 @@ const Hero = () => {
     <div className="p-4 space-y-3 bg-white border-t-4 border-primary rounded-lg">
       <input
         onChange={(e) => handleOnTitleChange(e.target.value)}
-        type="text"
+        type={INPUT_TYPES.text}
         value={newTitle}
         placeholder={title}
         className="text-2xl font-medium outline-none"
       />
-      <input
+      <textarea
         onChange={(e) => handleOnDescriptionChange(e.target.value)}
-        type="text"
         value={newDescription}
+        rows={3}
         placeholder={description}
-        className="text-sm font-medium outline-none"
+        className="text-sm font-medium outline-none w-full row-auto"
       />
     </div>
   );

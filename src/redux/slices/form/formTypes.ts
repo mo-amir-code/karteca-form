@@ -4,7 +4,9 @@ export interface FormSliceStateType{
         title: string,
         description: string,
         fields: [string],
-        values: [ValueType]
+        values: [ValueType],
+        startTime?: Date | undefined,
+        expiryTime?: Date | undefined
     }
 }
 
