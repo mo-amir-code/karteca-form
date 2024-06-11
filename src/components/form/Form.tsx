@@ -29,9 +29,12 @@ import { useCreateFormMutation } from "@/redux/queries/form/formQuery";
 import { APIRequestType } from "@/redux/reduxTypes";
 import FormSubmit from "./FormSubmit";
 import { FormDataAfterSubmitType } from "@/utils/types/client/form";
+import ButtonLoader from "../loaders/ButtonLoader";
 
 const Form = () => {
-  const [formDataAfterSubmit, setFormDataAfterSubmit] = useState<FormDataAfterSubmitType | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formDataAfterSubmit, setFormDataAfterSubmit] =
+    useState<FormDataAfterSubmitType | null>(null);
   const {
     fields,
     values,
@@ -98,6 +101,8 @@ const Form = () => {
     };
 
     try {
+      setIsLoading(true);
+
       const { data, error } = (await createForm(apiData)) as {
         data: APIRequestType;
         error?: { data: APIRequestType };
@@ -109,7 +114,7 @@ const Form = () => {
         setFormDataAfterSubmit({
           uid,
           title,
-          formId
+          formId,
         });
         dispatch(resetFormInfo(null));
         dispatch(setFormSubmitStatus(true));
@@ -118,7 +123,10 @@ const Form = () => {
       if (error?.data?.success === false) {
         toast.error(error?.data?.message);
       }
+
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.error(error);
       toast.error("Something error happened!");
     }
@@ -132,8 +140,14 @@ const Form = () => {
     dispatch(deleteFormField({ index }));
   };
 
-  return (isFormSubmit && formDataAfterSubmit) ? (
-    <FormSubmit title={formDataAfterSubmit.title} uid={formDataAfterSubmit.uid} formId={formDataAfterSubmit.formId} />
+  return isFormSubmit ? (
+    formDataAfterSubmit && (
+      <FormSubmit
+        title={formDataAfterSubmit.title}
+        uid={formDataAfterSubmit.uid}
+        formId={formDataAfterSubmit.formId}
+      />
+    )
   ) : (
     <form onSubmit={handleOnSubmit} className="space-y-2">
       <TimeStamps />
@@ -196,7 +210,7 @@ const Form = () => {
         type="submit"
         className="px-3 py-2 rounded-md smooth_transition active:scale-90 bg-primary text-white"
       >
-        Create Form
+        {isLoading ? <ButtonLoader /> : "Create Form"}
       </button>
     </form>
   );

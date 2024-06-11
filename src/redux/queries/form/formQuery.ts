@@ -17,10 +17,30 @@ const formAPI = createApi({
                 body: data,
                 credentials: "include"
             })
-        })
+        }),
+        participantFormSubmit: builder.mutation<APIRequestType, {formId:string, participant: object}>({
+            query: ({formId, participant}) => ({
+                url: formId,
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: { participant },
+                credentials: "include"
+            })
+        }),
+        getForm: builder.query<APIRequestType, string>({
+            query: (formId) => ({
+                url: formId,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include"
+            })
+        }),
     })
 });
 
-export const { useCreateFormMutation } = formAPI;
+export const { useCreateFormMutation, useGetFormQuery, useParticipantFormSubmitMutation } = formAPI;
 
 export default formAPI;

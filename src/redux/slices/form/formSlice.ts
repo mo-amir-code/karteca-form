@@ -81,6 +81,7 @@ const formSlice = createSlice({
     },
     setFormSubmitStatus(state, action){
       state.form.isFormSubmit = action.payload;
+      state.isFormActive = false;
     },
     resetFormInfo(state, action){
       state.form = initialState.form;

@@ -7,8 +7,7 @@ export interface NewFormType{
 }
 
 export interface FormParticipantType{
-    formId: string,
-    participant: [ObjectType]
+    participant: object
 }
 
 export interface ObjectType{
