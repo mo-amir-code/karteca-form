@@ -6,7 +6,8 @@ export interface FormSliceStateType{
         fields: [string],
         values: [ValueType],
         startTime?: Date | undefined,
-        expiryTime?: Date | undefined
+        expiryTime?: Date | undefined,
+        isFormSubmit: boolean
     }
 }
 

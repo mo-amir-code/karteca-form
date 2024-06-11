@@ -2,7 +2,7 @@ import { NewFormType } from "@/utils/types/server/form";
 import { NextResponse } from "next/server";
 import { uid } from "uid";
 import Form from "@/models/Form.Schema";
-import { arrayToObject, isDBConnected } from "@/utils/services/common";
+import { isDBConnected } from "@/utils/services/common";
 
 
 
@@ -51,7 +51,8 @@ export async function POST(req:Request){
             message: "Form has been created",
             data:{
                 uid: uniqueId,
-                formId: newForm._id
+                formId: newForm._id,
+                title
             }
         });
 

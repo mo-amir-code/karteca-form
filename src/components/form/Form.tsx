@@ -1,11 +1,13 @@
 "use client";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 import TextField from "./fields/TextField";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   createNewFieldInForm,
   deleteFormField,
+  resetFormInfo,
   selectForm,
+  setFormSubmitStatus,
 } from "@/redux/slices/form/formSlice";
 import SelectionField from "./fields/SelectionField";
 import DateField from "./fields/DateField";
@@ -16,27 +18,41 @@ import CheckboxField from "./fields/CheckboxField";
 import DropDownField from "./fields/DropdownField";
 import Hero from "./Hero";
 import { NewFormType } from "@/redux/queries/form/formTypes";
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, INPUT_TYPES } from "@/utils/constants";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  INPUT_TYPES,
+} from "@/utils/constants";
 import TimeStamps from "./TimeStamps";
 import toast from "react-hot-toast";
 import { useCreateFormMutation } from "@/redux/queries/form/formQuery";
 import { APIRequestType } from "@/redux/reduxTypes";
+import FormSubmit from "./FormSubmit";
+import { FormDataAfterSubmitType } from "@/utils/types/client/form";
 
 const Form = () => {
-  const { fields, values, title, description, startTime, expiryTime } = useAppSelector(selectForm);
+  const [formDataAfterSubmit, setFormDataAfterSubmit] = useState<FormDataAfterSubmitType | null>(null);
+  const {
+    fields,
+    values,
+    title,
+    description,
+    startTime,
+    expiryTime,
+    isFormSubmit,
+  } = useAppSelector(selectForm);
   const dispatch = useAppDispatch();
   const [createForm] = useCreateFormMutation();
 
-
-  const handleOnSubmit = async (e:FormEvent) => {
+  const handleOnSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if(title === DEFAULT_TITLE){
+    if (title === DEFAULT_TITLE) {
       toast.error("Set form title");
       return;
     }
 
-    if(description === DEFAULT_DESCRIPTION){
+    if (description === DEFAULT_DESCRIPTION) {
       toast.error("Set form description");
       return;
     }
@@ -44,62 +60,69 @@ const Form = () => {
     let isFieldsCorrect = true;
 
     values.forEach((ele, idx) => {
-      switch(ele.type){
+      switch (ele.type) {
         case INPUT_TYPES.checkbox:
-          if(ele.value?.length === 0){
+          if (ele.value?.length === 0) {
             isFieldsCorrect = false;
-            toast.error(`Provide atleast 1 option at no. ${idx+1} field`);
+            toast.error(`Provide atleast 1 option at no. ${idx + 1} field`);
           }
           break;
         case INPUT_TYPES.radio:
-          if(ele.value?.length === 0){
+          if (ele.value?.length === 0) {
             isFieldsCorrect = false;
-            toast.error(`Provide atleast 1 option at no. (${idx+1}) field`);
+            toast.error(`Provide atleast 1 option at no. (${idx + 1}) field`);
           }
           break;
         case INPUT_TYPES.select:
-          if(ele.value?.length === 0){
+          if (ele.value?.length === 0) {
             isFieldsCorrect = false;
-            toast.error(`Provide atleast 1 option at no. (${idx+1}) field`);
+            toast.error(`Provide atleast 1 option at no. (${idx + 1}) field`);
           }
           break;
       }
     });
 
-    if(!isFieldsCorrect){
+    if (!isFieldsCorrect) {
       return;
     }
 
-    const apiData:NewFormType = {
+    const apiData: NewFormType = {
       title,
       description,
-      fields:{
+      fields: {
         fields,
-        values
+        values,
       },
       startTime,
-      expiryTime
-    }
-
+      expiryTime,
+    };
 
     try {
+      const { data, error } = (await createForm(apiData)) as {
+        data: APIRequestType;
+        error?: { data: APIRequestType };
+      };
 
-      const {data, error} = (await createForm(apiData)) as { data:APIRequestType, error?:{data:APIRequestType} }
-
-      if(data.success){
+      if (data.success) {
+        const { uid, title, formId } = data.data;
         toast.success(data.message);
+        setFormDataAfterSubmit({
+          uid,
+          title,
+          formId
+        });
+        dispatch(resetFormInfo(null));
+        dispatch(setFormSubmitStatus(true));
       }
 
-      if(error?.data?.success === false){
+      if (error?.data?.success === false) {
         toast.error(error?.data?.message);
       }
-
     } catch (error) {
       console.error(error);
       toast.error("Something error happened!");
     }
-  }
-
+  };
 
   const handleCreateNewField = (index: number) => {
     dispatch(createNewFieldInForm({ index }));
@@ -108,9 +131,10 @@ const Form = () => {
   const handleDeleteField = (index: number) => {
     dispatch(deleteFormField({ index }));
   };
-  
 
-  return (
+  return (isFormSubmit && formDataAfterSubmit) ? (
+    <FormSubmit title={formDataAfterSubmit.title} uid={formDataAfterSubmit.uid} formId={formDataAfterSubmit.formId} />
+  ) : (
     <form onSubmit={handleOnSubmit} className="space-y-2">
       <TimeStamps />
       <Hero />
@@ -120,7 +144,11 @@ const Form = () => {
           className="relative bg-white rounded-md space-y-4 w-full p-4"
         >
           <div className="flex gap-2">
-            <TextField type={INPUT_TYPES.text} placeholder={field} index={index} />
+            <TextField
+              type={INPUT_TYPES.text}
+              placeholder={field}
+              index={index}
+            />
             <SelectionField
               index={index}
               defaultSelected={values[index].type}
@@ -139,11 +167,11 @@ const Form = () => {
               case INPUT_TYPES.date:
                 return <DateField isDisable />;
               case INPUT_TYPES.radio:
-                return <RadioField index={index}/>
+                return <RadioField index={index} />;
               case INPUT_TYPES.checkbox:
-                return <CheckboxField index={index}/>
+                return <CheckboxField index={index} />;
               case INPUT_TYPES.select:
-                return <DropDownField index={index}/>
+                return <DropDownField index={index} />;
             }
           })()}
           <div className="absolute gap-2 -top-4 flex flex-col -right-10 bg-white p-1 rounded-sm">
@@ -164,7 +192,12 @@ const Form = () => {
           </div>
         </div>
       ))}
-      <button type="submit" className="px-3 py-2 rounded-md smooth_transition active:scale-90 bg-primary text-white" >Create Form</button>
+      <button
+        type="submit"
+        className="px-3 py-2 rounded-md smooth_transition active:scale-90 bg-primary text-white"
+      >
+        Create Form
+      </button>
     </form>
   );
 };

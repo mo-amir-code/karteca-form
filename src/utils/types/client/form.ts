@@ -5,3 +5,15 @@ export interface TextInputFieldType{
     isDisable?: boolean,
     index?: number
 }
+
+export interface FormSubmitType{
+    title: string,
+    uid: string,
+    formId: string
+}
+
+export interface FormDataAfterSubmitType{
+    title: string,
+    uid: string,
+    formId: string
+}

@@ -16,7 +16,8 @@ const initialState = {
       },
     ],
     startTime: undefined,
-    expiryTime: undefined
+    expiryTime: undefined,
+    isFormSubmit: false
   },
 } as FormSliceStateType;
 
@@ -77,6 +78,12 @@ const formSlice = createSlice({
       if(expiryTime){
         state.form.expiryTime = expiryTime;
       }
+    },
+    setFormSubmitStatus(state, action){
+      state.form.isFormSubmit = action.payload;
+    },
+    resetFormInfo(state, action){
+      state.form = initialState.form;
     }
   },
 });
@@ -90,7 +97,9 @@ export const {
   updateFormValue,
   deleteFormValue,
   updateFormTitleAndDescription,
-  setFormTime
+  setFormTime,
+  setFormSubmitStatus,
+  resetFormInfo
 } = formSlice.actions;
 
 export const selectForm = (state: RootState) => state.form.form;
