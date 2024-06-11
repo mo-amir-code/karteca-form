@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { IoCopy } from "react-icons/io5";
 import { IoIosCloseCircle } from "react-icons/io";
 import { useAppDispatch } from '@/redux/hooks';
-import { setFormSubmitStatus } from '@/redux/slices/form/formSlice';
+import { setFormSubmitStatus, toggleFormActive } from '@/redux/slices/form/formSlice';
 
 const FormSubmit = ({ title, formId, uid }:FormSubmitType) => {
     const dispatch = useAppDispatch();
@@ -47,6 +47,7 @@ const FormSubmit = ({ title, formId, uid }:FormSubmitType) => {
 
     const handleClose = () => {
         dispatch(setFormSubmitStatus(false));
+        dispatch(toggleFormActive({status: false}));
     }
 
   return (

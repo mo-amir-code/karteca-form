@@ -26,7 +26,8 @@ const formSlice = createSlice({
   initialState,
   reducers: {
     toggleFormActive(state, action) {
-      state.isFormActive = action.payload;
+      const { status } = action.payload;
+      state.isFormActive = status;
     },
     updateFormValueType(state, action) {
       const { index, newType } = action.payload;
@@ -81,7 +82,6 @@ const formSlice = createSlice({
     },
     setFormSubmitStatus(state, action){
       state.form.isFormSubmit = action.payload;
-      state.isFormActive = false;
     },
     resetFormInfo(state, action){
       state.form = initialState.form;

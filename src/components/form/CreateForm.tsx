@@ -7,7 +7,7 @@ const CreateForm = () => {
   const dispatch = useAppDispatch();
 
   const handleActivateForm = () => {
-    dispatch(toggleFormActive(true));
+    dispatch(toggleFormActive({status:true}));
   }
 
   return (
