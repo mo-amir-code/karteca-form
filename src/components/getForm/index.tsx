@@ -109,7 +109,7 @@ const Index = () => {
                       <span className="font-semibold">{key}:</span>
                       <ul>
                         {(value as [string]).map((v: string) => (
-                          <li>{v}</li>
+                          <li key={v} >{v}</li>
                         ))}
                       </ul>
                     </div>
