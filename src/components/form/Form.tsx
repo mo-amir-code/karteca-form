@@ -8,6 +8,8 @@ import {
   resetFormInfo,
   selectForm,
   setFormSubmitStatus,
+  toggleFormActive,
+  toggleGetFormActive,
 } from "@/redux/slices/form/formSlice";
 import SelectionField from "./fields/SelectionField";
 import DateField from "./fields/DateField";
@@ -140,6 +142,11 @@ const Form = () => {
     dispatch(deleteFormField({ index }));
   };
 
+  const handleClose = () => {
+    dispatch(toggleFormActive({status: false}));
+    dispatch(toggleGetFormActive({status: false}));
+  }
+
   return isFormSubmit ? (
     formDataAfterSubmit && (
       <FormSubmit
@@ -206,12 +213,20 @@ const Form = () => {
           </div>
         </div>
       ))}
+      <div className="flex items-center gap-2" >
       <button
         type="submit"
         className="px-3 py-2 rounded-md smooth_transition active:scale-90 bg-primary text-white"
-      >
+        >
         {isLoading ? <ButtonLoader /> : "Create Form"}
       </button>
+      <button
+        onClick={()=> handleClose()}
+        className="px-3 py-2 rounded-md smooth_transition active:scale-90 bg-primary text-white"
+        >
+          Go Back
+      </button>
+        </div>
     </form>
   );
 };

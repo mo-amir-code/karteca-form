@@ -5,7 +5,8 @@ import { INPUT_TYPES } from "@/utils/constants";
 
 const initialState = {
   form: {},
-  submittedFormId: []
+  submittedFormId: [],
+  isFormSubmit: false
 } as ParticipantStateType;
 
 const participantSlice = createSlice({
@@ -39,15 +40,20 @@ const participantSlice = createSlice({
     setSubmittedFormId(state, action){
       const {formIds} = action.payload as { formIds: [string] };
       state.submittedFormId = formIds;
+    },
+    setIsFormSubmit(state, action){
+      state.isFormSubmit = action.payload.status;
     }
   },
 });
 
 export const {
   setFormFieldsValue,
-  setSubmittedFormId
+  setSubmittedFormId,
+  setIsFormSubmit
 } = participantSlice.actions;
 
-export const selectParticipantForm = (state: RootState) => state.participant.form
+export const selectParticipantForm = (state: RootState) => state.participant.form;
+export const selectIsParticipantFormSubmit = (state: RootState) => state.participant.isFormSubmit;
 
 export default participantSlice;

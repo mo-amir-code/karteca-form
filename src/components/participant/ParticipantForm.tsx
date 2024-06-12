@@ -8,9 +8,10 @@ import Hero from "./Hero";
 import { ParticipantGetFormAPIType } from "@/utils/types/client/form";
 import DefaultField from "./DefaultField";
 import ButtonLoader from "../loaders/ButtonLoader";
-import { selectParticipantForm } from "@/redux/slices/participant/participantSlice";
-import { useAppSelector } from "@/redux/hooks";
+import { selectIsParticipantFormSubmit, selectParticipantForm, setIsFormSubmit } from "@/redux/slices/participant/participantSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { APIRequestType } from "@/redux/reduxTypes";
+import SubmissionScreen from "./SubmissionScreen";
 
 const ParticipantForm = () => {
   const [isButtonLoading, setIsButtonLoading] = useState<boolean>(false);
@@ -20,7 +21,9 @@ const ParticipantForm = () => {
     { skip: formId ? false : true }
   ) as ParticipantGetFormAPIType;
   const form = useAppSelector(selectParticipantForm);
+  const isFormSubmit = useAppSelector(selectIsParticipantFormSubmit);
   const [submitForm] = useParticipantFormSubmitMutation();
+  const dispatch = useAppDispatch();
 
   if (isError) {
     toast.error("Something Error Happened!");
@@ -60,6 +63,7 @@ const ParticipantForm = () => {
 
       if(data){
         toast.success(data?.message);
+        dispatch(setIsFormSubmit({status: true}));
       }
 
       if(error){
@@ -76,7 +80,7 @@ const ParticipantForm = () => {
 
   }
 
-  return (
+  return isFormSubmit? <SubmissionScreen title={data?.data?.title} /> : (
     <form onSubmit={handleOnSubmit} className="space-y-2">
       {isSuccess && data ? (
         <>

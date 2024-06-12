@@ -1,23 +1,23 @@
 "use client"
 import { useAppDispatch } from "@/redux/hooks";
-import { toggleFormActive } from "@/redux/slices/form/formSlice";
-import { CiCirclePlus } from "react-icons/ci";
+import { toggleGetFormActive } from "@/redux/slices/form/formSlice";
+import { IoAnalytics } from "react-icons/io5";
 
-const CreateForm = () => {
+const GetFormData = () => {
   const dispatch = useAppDispatch();
 
   const handleActivateForm = () => {
-    dispatch(toggleFormActive({status:true}));
+    dispatch(toggleGetFormActive({status:true}));
   }
 
   return (
     <div className="flex justify-center items-center">
       <button onClick={() => handleActivateForm()} className="w-full border-t-4 border-primary smooth_transition flex hover_effect items-center justify-center gap-2 py-12 bg-white rounded-lg">
-        <CiCirclePlus className="w-20 text-primary h-20 " />
-        <span className="text-xl">Create New Form</span>
+        <IoAnalytics className="w-20 text-primary h-20 " />
+        <span className="text-xl">Get Form Data</span>
       </button>
     </div>
   );
 };
 
-export default CreateForm;
+export default GetFormData;

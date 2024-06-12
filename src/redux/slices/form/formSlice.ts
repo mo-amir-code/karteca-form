@@ -5,6 +5,7 @@ import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, INPUT_TYPES } from "@/utils/constan
 
 const initialState = {
   isFormActive: false,
+  isGetFormActive: false,
   form: {
     title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
@@ -28,6 +29,10 @@ const formSlice = createSlice({
     toggleFormActive(state, action) {
       const { status } = action.payload;
       state.isFormActive = status;
+    },
+    toggleGetFormActive(state, action) {
+      const { status } = action.payload;
+      state.isGetFormActive = status;
     },
     updateFormValueType(state, action) {
       const { index, newType } = action.payload;
@@ -100,10 +105,12 @@ export const {
   updateFormTitleAndDescription,
   setFormTime,
   setFormSubmitStatus,
-  resetFormInfo
+  resetFormInfo,
+  toggleGetFormActive
 } = formSlice.actions;
 
 export const selectForm = (state: RootState) => state.form.form;
 export const selectIsFormActive = (state: RootState) => state.form.isFormActive;
+export const selectIsGetFormActive = (state: RootState) => state.form.isGetFormActive;
 
 export default formSlice;

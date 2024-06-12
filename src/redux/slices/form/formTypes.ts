@@ -1,5 +1,6 @@
 export interface FormSliceStateType{
     isFormActive: boolean,
+    isGetFormActive: boolean,
     form:{
         title: string,
         description: string,

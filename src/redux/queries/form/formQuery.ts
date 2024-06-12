@@ -38,9 +38,18 @@ const formAPI = createApi({
                 credentials: "include"
             })
         }),
+        getFormInfo: builder.query<APIRequestType, string>({
+            query: (formUID) => ({
+                url: `?formUID=${formUID}`,
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include"
+            })
+        }),
     })
 });
 
-export const { useCreateFormMutation, useGetFormQuery, useParticipantFormSubmitMutation } = formAPI;
+export const { useCreateFormMutation, useGetFormQuery, useParticipantFormSubmitMutation, useGetFormInfoQuery } = formAPI;
 
 export default formAPI;
