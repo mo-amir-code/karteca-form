@@ -157,7 +157,7 @@ const Form = () => {
     )
   ) : (
     <form onSubmit={handleOnSubmit} className="space-y-2">
-      <TimeStamps />
+      {/* <TimeStamps /> */}
       <Hero />
       {fields.map((field: string, index: number) => (
         <div
